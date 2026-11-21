@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Devil’s Gear — T-Embed UI preview</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --pri: #c00000;
+      --sec: #d0b000;
+      --w: 320px;
+      --h: 170px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #140808;
+      color: #f2e6c8;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+    h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: 0.12em; color: #c00000; }
+    .sub { color: #d0b000; margin-bottom: 18px; letter-spacing: 0.28em; font-size: 12px; }
+    .note { max-width: 720px; text-align: center; color: #cbbca0; font-size: 14px; margin-bottom: 18px; }
+    .device {
+      background: #1a1010;
+      border: 8px solid #2a1818;
+      border-radius: 18px;
+      padding: 14px 18px 18px;
+      box-shadow: 0 20px 50px #0008;
+    }
+    .bezel { display: flex; align-items: center; gap: 14px; }
+    .screen {
+      width: var(--w);
+      height: var(--h);
+      background: var(--bg);
+      color: var(--pri);
+      image-rendering: pixelated;
+      overflow: hidden;
+      position: relative;
+      font-family: "Lucida Console", "Consolas", monospace;
+      border: 1px solid #3a2020;
+    }
+    .encoder {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #666, #222 70%);
+      border: 3px solid #444;
+      flex-shrink: 0;
+    }
+    .status {
+      height: 18px; padding: 2px 6px 0;
+      font-size: 10px; color: var(--pri);
+      border-bottom: 1px solid var(--pri);
+      letter-spacing: 0.04em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: calc(var(--h) - 18px);
+    }
+    .cell {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; gap: 4px; font-size: 8px; color: var(--pri);
+    }
+    .cell.sel { background: var(--pri); color: #000; border-radius: 4px; margin: 2px; }
+    .icon { width: 28px; height: 28px; }
+    .splash { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .splash h2 { margin: 0; font-size: 16px; color: var(--pri); letter-spacing: 0.08em; }
+    .splash p { margin: 6px 0 0; font-size: 10px; color: var(--sec); letter-spacing: 0.22em; }
+    .splash small { margin-top: 10px; color: var(--pri); font-size: 9px; }
+    .rule { width: 80px; height: 1px; background: var(--pri); margin-top: 12px; position: relative; }
+    .rule::after { content: ""; width: 6px; height: 6px; background: var(--sec); border-radius: 50%; position: absolute; left: 37px; top: -2.5px; }
+    .list { padding: 4px 0 0; }
+    .row { padding: 3px 10px; font-size: 11px; cursor: pointer; }
+    .row.sel { background: var(--pri); color: #000; }
+    .titlebar { text-align: center; font-size: 11px; color: var(--pri); padding-top: 4px; }
+    .reveal {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .reveal h3 { margin: 0; color: var(--sec); font-size: 12px; }
+    .reveal p { margin: 10px 8px 0; color: var(--pri); font-size: 14px; text-align: center; }
+    .reveal small { position: absolute; bottom: 8px; color: var(--sec); font-size: 9px; }
+    .keys { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    button {
+      background: #2a1010; color: #f2e6c8; border: 1px solid #c00000; padding: 6px 12px; cursor: pointer; border-radius: 4px;
+    }
+    button:hover { background: #c00000; color: #000; }
+    .cmds {
+      margin-top: 28px; width: min(760px, 100%);
+      background: #0c0707; border: 1px solid #3a2020; padding: 16px 18px; border-radius: 8px;
+    }
+    .cmds h3 { margin: 0 0 8px; color: #d0b000; font-size: 13px; }
+    pre { margin: 0 0 14px; white-space: pre-wrap; color: #e8dcc0; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>DEVIL’S GEAR</h1>
+  <div class="sub">EXOTIC MAGICK · T-Embed 320×170 preview</div>
+  <p class="note">This is a clickable mock of the firmware UI. The real binary only runs on a LilyGO T-Embed CC1101. Encoder left/right, click to select, Esc to go back.</p>
+
+  <div class="device">
+    <div class="bezel">
+      <div class="screen" id="screen"></div>
+      <div class="encoder" title="encoder"></div>
+    </div>
+  </div>
+
+  <div class="keys">
+    <button data-k="ArrowLeft">Encoder −</button>
+    <button data-k="Enter">Press</button>
+    <button data-k="ArrowRight">Encoder +</button>
+    <button data-k="Escape">Back</button>
+  </div>
+
+  <div class="cmds">
+    <h3>Build</h3>
+<pre>$env:PLATFORMIO_CORE_DIR = "D:\pio"
+python -m platformio run -e lilygo-t-embed-cc1101</pre>
+    <h3>Host tests</h3>
+<pre>python tests/test_devils_gear.py</pre>
+    <h3>Flash (hold BOOT, tap RESET, release BOOT)</h3>
+<pre>python -m platformio run -e lilygo-t-embed-cc1101 -t upload
+
+# or:
+python -m esptool --chip esp32s3 --baud 921600 write_flash 0x0 firmware/DevilsGear-lilygo-t-embed-cc1101.bin</pre>
+    <h3>Serial monitor</h3>
+<pre>python -m platformio device monitor -e lilygo-t-embed-cc1101</pre>
+  </div>
+
+<script>
+const ITEMS = [
+  { id:"props", name:"Prop Triggers", icon:"rf" },
+  { id:"cards", name:"Magic Cards", icon:"card" },
+  { id:"ir", name:"IR Reveals", icon:"ir" },
+  { id:"pred", name:"Predictions", icon:"eye" },
+  { id:"fx", name:"Effects", icon:"bolt" },
+  { id:"set", name:"Settings", icon:"gear" },
+];
+const MENUS = {
+  props: ["No props yet", "Import .sub", "Capture RF", "Manage"],
+  cards: ["Scan", "Enroll", "Manage"],
+  ir: ["Samsung", "LG", "Sony", "Universal TV Off", "Import .ir", "Learn IR", "Manage"],
+  pred: ["Prepare", "Reveal", "Peek", "Clear"],
+  fx: ["LED Crimson", "LED Gold", "LED Rainbow", "LED Off", "Success pattern", "Transmit pattern", "Error pattern", "Boot motif"],
+  set: ["Display & UI", "LED Config", "Audio Config", "Workshop", "Power", "Feedback: ON", "About"],
+};
+const TITLES = { props:"Prop Triggers", cards:"Magic Cards", ir:"IR Reveals", pred:"Predictions", fx:"Effects", set:"Settings" };
+
+let view = "splash";
+let sel = 0;
+let subSel = 0;
+let currentMenu = null;
+let reveal = false;
+
+function svg(kind, color) {
+  const c = color;
+  if (kind==="rf") return `<svg class="icon" viewBox="0 0 32 32"><circle cx="16" cy="8" r="3" fill="${c}"/><path d="M8 14a10 10 0 0 1 16 0M5 20a14 14 0 0 1 22 0" fill="none" stroke="${c}"/><polygon points="16,12 10,28 22,28" fill="${c}"/></svg>`;
+  if (kind==="card") return `<svg class="icon" viewBox="0 0 32 32"><rect x="8" y="4" width="16" height="24" rx="2" fill="none" stroke="${c}" stroke-width="2"/><circle cx="16" cy="13" r="3" fill="${c}"/><path d="M11 21h10M12 24h8" stroke="${c}"/></svg>`;
+  if (kind==="ir") return `<svg class="icon" viewBox="0 0 32 32"><rect x="4" y="6" width="5" height="20" fill="${c}"/><path d="M14 16a8 8 0 0 1 8 0M17 16a5 5 0 0 1 5 0M20 16a2 2 0 0 1 2 0" fill="none" stroke="${c}"/></svg>`;
+  if (kind==="eye") return `<svg class="icon" viewBox="0 0 32 32"><ellipse cx="16" cy="16" rx="12" ry="7" fill="none" stroke="${c}"/><circle cx="16" cy="16" r="4" fill="${c}"/></svg>`;
+  if (kind==="bolt") return `<svg class="icon" viewBox="0 0 32 32"><polygon points="18,2 8,18 15,18 12,30 24,14 17,14" fill="${c}"/></svg>`;
+  return `<svg class="icon" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6" fill="none" stroke="${c}" stroke-width="2"/><path d="M16 4v4M16 24v4M4 16h4M24 16h4M7 7l3 3M22 22l3 3M7 25l3-3M22 10l3-3" stroke="${c}"/></svg>`;
+}
+
+function render() {
+  const s = document.getElementById("screen");
+  if (view === "splash") {
+    s.innerHTML = `<div class="splash"><h2>DEVIL'S GEAR</h2><p>EXOTIC MAGICK</p><small>DG 1.0.0</small><div class="rule"></div></div>`;
+    return;
+  }
+  if (view === "reveal") {
+    s.innerHTML = `<div class="reveal"><h3>Ace</h3><p>Ace of Spades</p><small>press to close</small></div>`;
+    return;
+  }
+  if (view === "grid") {
+    s.innerHTML = `<div class="status">DEVIL'S GEAR</div><div class="grid">${ITEMS.map((it,i)=>`
+      <div class="cell ${i===sel?"sel":""}" data-i="${i}">
+        ${svg(it.icon, i===sel?"#000":"#c00000")}
+        <div>${it.name}</div>
+      </div>`).join("")}</div>`;
+    s.querySelectorAll(".cell").forEach(el => el.onclick = () => { sel = +el.dataset.i; enter(); });
+    return;
+  }
+  if (view === "sub") {
+    const rows = MENUS[currentMenu];
+    s.innerHTML = `<div class="status">DEVIL'S GEAR</div><div class="titlebar">${TITLES[currentMenu]}</div><div class="list">${rows.map((r,i)=>`<div class="row ${i===subSel?"sel":""}" data-i="${i}">${r}</div>`).join("")}</div>`;
+    s.querySelectorAll(".row").forEach(el => el.onclick = () => { subSel = +el.dataset.i; activate(); });
+  }
+}
+
+function enter() {
+  currentMenu = ITEMS[sel].id;
+  subSel = 0;
+  view = "sub";
+  render();
+}
+function activate() {
+  const label = MENUS[currentMenu][subSel];
+  if (currentMenu === "pred" && (label === "Reveal" || label === "Peek")) {
+    view = "reveal"; render(); return;
+  }
+}
+function back() {
+  if (view === "reveal") { view = "sub"; render(); return; }
+  if (view === "sub") { view = "grid"; render(); return; }
+}
+function key(k) {
+  if (view === "splash" && (k==="Enter" || k==="Escape" || k.startsWith("Arrow"))) { view="grid"; render(); return; }
+  if (k==="Escape") { back(); return; }
+  if (view==="grid") {
+    if (k==="ArrowRight") sel = (sel+1)%ITEMS.length;
+    if (k==="ArrowLeft") sel = (sel+ITEMS.length-1)%ITEMS.length;
+    if (k==="Enter") enter();
+    render(); return;
+  }
+  if (view==="sub") {
+    const n = MENUS[currentMenu].length;
+    if (k==="ArrowRight" || k==="ArrowDown") subSel = (subSel+1)%n;
+    if (k==="ArrowLeft" || k==="ArrowUp") subSel = (subSel+n-1)%n;
+    if (k==="Enter") activate();
+    render();
+  }
+}
+document.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => key(b.dataset.k));
+document.addEventListener("keydown", e => {
+  if (["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Enter","Escape"].includes(e.key)) { e.preventDefault(); key(e.key); }
+});
+setTimeout(() => { if (view==="splash") { view="grid"; render(); } }, 1800);
+render();
+</script>
+</body>
+</html>

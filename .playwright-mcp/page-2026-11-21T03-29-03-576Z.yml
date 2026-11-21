@@ -1,0 +1,29 @@
+- generic [ref=e1]:
+  - heading "DEVIL’S GEAR" [level=1] [ref=e2]
+  - generic [ref=e3]: EXOTIC MAGICK · T-Embed 320×170 preview
+  - paragraph [ref=e4]: This is a clickable mock of the firmware UI. The real binary only runs on a LilyGO T-Embed CC1101. Encoder left/right, click to select, Esc to go back.
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e78]: DEVIL'S GEAR
+      - generic [ref=e79]:
+        - generic [ref=e80] [cursor=pointer]: Prop Triggers
+        - generic [ref=e86] [cursor=pointer]: Magic Cards
+        - generic [ref=e92] [cursor=pointer]: IR Reveals
+        - generic [ref=e97] [cursor=pointer]: Predictions
+        - generic [ref=e102] [cursor=pointer]: Effects
+        - generic [ref=e106] [cursor=pointer]: Settings
+    - generic "encoder" [ref=e13]
+  - generic [ref=e14]:
+    - button "Encoder −" [ref=e15] [cursor=pointer]
+    - button "Press" [ref=e16] [cursor=pointer]
+    - button "Encoder +" [ref=e17] [cursor=pointer]
+    - button "Back" [active] [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - heading "Build" [level=3] [ref=e20]
+    - generic [ref=e21]: $env:PLATFORMIO_CORE_DIR = "D:\pio" python -m platformio run -e lilygo-t-embed-cc1101
+    - heading "Host tests" [level=3] [ref=e22]
+    - generic [ref=e23]: python tests/test_devils_gear.py
+    - heading "Flash (hold BOOT, tap RESET, release BOOT)" [level=3] [ref=e24]
+    - generic [ref=e25]: "python -m platformio run -e lilygo-t-embed-cc1101 -t upload # or: python -m esptool --chip esp32s3 --baud 921600 write_flash 0x0 firmware/DevilsGear-lilygo-t-embed-cc1101.bin"
+    - heading "Serial monitor" [level=3] [ref=e26]
+    - generic [ref=e27]: python -m platformio device monitor -e lilygo-t-embed-cc1101
