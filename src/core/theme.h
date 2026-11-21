@@ -3,8 +3,13 @@
 #include "sd_functions.h"
 #include <ArduinoJson.h>
 
+#ifdef DEVILS_GEAR
+#define DEFAULT_PRICOLOR 0xC000
+#define DEFAULT_SECCOLOR 0xD5A0
+#else
 #define DEFAULT_PRICOLOR 0xA80F
 #define DEFAULT_SECCOLOR 0xCB76
+#endif
 
 struct themeFiles {
     String wifi = "";

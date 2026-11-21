@@ -5,7 +5,11 @@
 
 class ConfigMenu : public MenuItemInterface {
 public:
+#ifdef DEVILS_GEAR
+    ConfigMenu() : MenuItemInterface("Settings") {}
+#else
     ConfigMenu() : MenuItemInterface("Config") {}
+#endif
 
     void optionsMenu(void);
     void drawIcon(float scale);
@@ -22,6 +26,9 @@ private:
     void powerMenu(void);
     void pinsMenu(void);
     void devMenu(void);
+#ifdef DEVILS_GEAR
+    void workshopMenu(void);
+#endif
 
     // Helper methods for complex operations
     void switchToUSBSerial(void);

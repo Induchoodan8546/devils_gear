@@ -1302,7 +1302,11 @@ void drawStatusBar() {
         tft.print(timeStr);
     } else {
         setTftDisplay(BORDER_PAD_X, BORDER_PAD_X, bruceConfig.priColor, FP, bruceConfig.bgColor);
+#ifdef DEVILS_GEAR
+        tft.print("DEVIL'S GEAR");
+#else
         tft.print("BRUCE " + String(BRUCE_VERSION));
+#endif
     }
 
     int iconCount = 0;

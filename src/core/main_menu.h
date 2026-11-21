@@ -20,6 +20,13 @@
 #include "menu_items/ScriptsMenu.h"
 #include "menu_items/WifiMenu.h"
 #include "menu_items/WireToolsMenu.h"
+#ifdef DEVILS_GEAR
+#include "menu_items/EffectsMenu.h"
+#include "menu_items/IRRevealsMenu.h"
+#include "menu_items/MagicCardsMenu.h"
+#include "menu_items/PredictionsMenu.h"
+#include "menu_items/PropTriggersMenu.h"
+#endif
 class MainMenu {
 public:
     FileMenu fileMenu;
@@ -40,6 +47,13 @@ public:
     LoRaMenu loraMenu;
     EthernetMenu ethernetMenu;
     WireToolsMenu wireToolsMenu;
+#endif
+#ifdef DEVILS_GEAR
+    PropTriggersMenu propTriggersMenu;
+    MagicCardsMenu magicCardsMenu;
+    IRRevealsMenu irRevealsMenu;
+    PredictionsMenu predictionsMenu;
+    EffectsMenu effectsMenu;
 #endif
 
     MainMenu();

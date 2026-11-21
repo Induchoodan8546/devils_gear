@@ -61,7 +61,11 @@ public:
 #ifdef HAS_RGB_LED
     // Led
     int ledBright = 50;
+#ifdef DEVILS_GEAR
+    uint32_t ledColor = 0x960000;
+#else
     uint32_t ledColor = 0x960064;
+#endif
     int ledBlinkEnabled = 1;
     int ledEffect = 0;
     int ledEffectSpeed = 5;
@@ -98,7 +102,11 @@ public:
     int devMode = 0;
 
     int colorInverted = DEFAULT_COLOR_INVERTED;
+#ifdef DEVILS_GEAR
+    int mainMenuStyle = MAIN_MENU_GRID;
+#else
     int mainMenuStyle = MAIN_MENU_CAROUSEL;
+#endif
     int badUSBBLEKeyboardLayout = 0;
     uint16_t badUSBBLEKeyDelay = 10;
     bool badUSBBLEShowOutput = true;

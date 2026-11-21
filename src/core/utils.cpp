@@ -135,7 +135,17 @@ void updateTimeStr(struct tm timeInfo) {
 void showDeviceInfo() {
     ScrollableTextArea area = ScrollableTextArea("DEVICE INFO");
 
+#ifdef DEVILS_GEAR
+#ifndef DEVILS_GEAR_VERSION
+#define DEVILS_GEAR_VERSION "1.0.0"
+#endif
+    area.addLine("Devil's Gear " + String(DEVILS_GEAR_VERSION));
+    area.addLine("EXOTIC MAGICK");
+    area.addLine("Based on Bruce " + String(BRUCE_VERSION));
+    area.addLine("License: AGPL-3.0");
+#else
     area.addLine("Bruce Version: " + String(BRUCE_VERSION));
+#endif
     area.addLine("EEPROM size: " + String(EEPROMSIZE));
     area.addLine("");
     area.addLine("[MEMORY]");

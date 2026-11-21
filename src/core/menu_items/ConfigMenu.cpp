@@ -9,6 +9,12 @@
 #ifdef HAS_RGB_LED
 #include "core/led_control.h"
 #endif
+#ifdef DEVILS_GEAR
+#include "modules/ir/ir_read.h"
+#include "modules/magic/magic_feedback.h"
+#include "modules/rf/rf_scan.h"
+#include "modules/rfid/tag_o_matic.h"
+#endif
 
 /*********************************************************************
 **  Function: optionsMenu
@@ -23,6 +29,21 @@ void ConfigMenu::optionsMenu() {
             return;
         }
 
+#ifdef DEVILS_GEAR
+        std::vector<Option> localOptions = {
+            {"Display & UI", [this]() { displayUIMenu(); }},
+#ifdef HAS_RGB_LED
+            {"LED Config", [this]() { ledMenu(); }},
+#endif
+#if !defined(LITE_VERSION)
+            {"Audio Config", [this]() { audioMenu(); }},
+#endif
+            {"Workshop", [this]() { workshopMenu(); }},
+            {"Power", [this]() { powerMenu(); }},
+            {String("Feedback: ") + (magicFeedbackEnabled() ? "ON" : "OFF"),
+             []() { magicSetFeedbackEnabled(!magicFeedbackEnabled()); }},
+        };
+#else
         std::vector<Option> localOptions = {
             {"Display & UI",  [this]() { displayUIMenu(); }},
 #ifdef HAS_RGB_LED
@@ -44,11 +65,16 @@ void ConfigMenu::optionsMenu() {
         if (bruceConfig.devMode) {
             localOptions.push_back({"Dev Mode", [this]() { devMenu(); }});
         }
+#endif
 
         localOptions.push_back({"About", showDeviceInfo});
         localOptions.push_back({"Main Menu", []() {}});
 
+#ifdef DEVILS_GEAR
+        int selected = loopOptions(localOptions, MENU_TYPE_SUBMENU, "Settings");
+#else
         int selected = loopOptions(localOptions, MENU_TYPE_SUBMENU, "Config");
+#endif
 
         // Exit to Main Menu only if user pressed Back
         if (selected == -1 || selected == localOptions.size() - 1) { return; }
@@ -365,6 +391,23 @@ void ConfigMenu::switchToUARTSerial() {
     Serial1.begin(115200, SERIAL_8N1, bruceConfigPins.uart_bus.rx, bruceConfigPins.uart_bus.tx);
     USBserial.setSerialOutput(&Serial1);
 }
+
+#ifdef DEVILS_GEAR
+void ConfigMenu::workshopMenu() {
+    while (true) {
+        std::vector<Option> localOptions = {
+            {"Files", []() { mainMenu.fileMenu.optionsMenu(); }},
+            {"RF Scan/Copy", []() { RFScan(); }},
+            {"IR Learn", []() { IrRead(); }},
+            {"RFID Read", []() { TagOMatic(); }},
+            {"Back", []() {}},
+        };
+        int selected = loopOptions(localOptions, MENU_TYPE_SUBMENU, "Workshop");
+        if (selected == -1 || selected == (int)localOptions.size() - 1) return;
+    }
+}
+#endif
+
 /*********************************************************************
 **  Function: drawIcon
 **  Draw config gear icon

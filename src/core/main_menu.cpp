@@ -4,6 +4,16 @@
 #include <globals.h>
 
 MainMenu::MainMenu() {
+#ifdef DEVILS_GEAR
+    _menuItems = {
+        &propTriggersMenu,
+        &magicCardsMenu,
+        &irRevealsMenu,
+        &predictionsMenu,
+        &effectsMenu,
+        &configMenu,
+    };
+#else
     _menuItems = {
         &wifiMenu,
         &bleMenu,
@@ -32,6 +42,7 @@ MainMenu::MainMenu() {
 #endif
         &configMenu,
     };
+#endif
 
     _totalItems = _menuItems.size();
 

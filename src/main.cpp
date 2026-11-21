@@ -6,6 +6,11 @@
 #include "core/ram_profile.h"
 #include "core/serial_commands/cli.h"
 #include "core/utils.h"
+#ifdef DEVILS_GEAR
+#include "modules/magic/magic_feedback.h"
+#include "modules/magic/magic_store.h"
+#include "modules/magic/magic_ui.h"
+#endif
 #include "current_year.h"
 #include "esp32-hal-psram.h"
 #include "esp_heap_caps.h"
@@ -547,9 +552,17 @@ void setup() {
     _late_setup_gpio();
 #if !defined(USE_DUMMY_TFT)
     bruceConfig.openThemeFile(bruceConfig.themeFS(), bruceConfig.themePath, false);
+#ifdef DEVILS_GEAR
+    magicEnsureSeed();
+#endif
     if (!bruceConfig.instantBoot) {
+#ifdef DEVILS_GEAR
+        magicBootScreen();
+        magicFeedbackBoot();
+#else
         boot_screen_anim();
         startup_sound();
+#endif
     }
     if (bruceConfig.wifiAtStartup) {
         log_i("Loading Wifi at Startup");
